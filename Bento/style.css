@@ -7,16 +7,10 @@
 body{
     .custom-gradient {
   background: linear-gradient(to bottom, #6A315E, #000000);
+  font-family: 'Poppins', sans-serif;
 }
 }
 
-
-.p{
-   
-    opacity: 80%;
-}
-
-.h1 {color: white;}
 
 #logo{
     width: 50px;
@@ -28,22 +22,17 @@ body{
     height: 20px;
 }
 
-#regen{
+#icon{
     width: 20px;
     height: 20px;
+    justify-content: space-between;
 }
 
-#intellect{
-    width: 20px;
-    height: 20px;
+.AK{
+    font-size: 70px;
+    font-weight: bold;
 }
 
-#strength{
-    width: 20px;
-    height: 20px;
-}
-
-#more{
-    width: 20px;
-    height: 20px;
+.AZA{
+    color: #6A315E;
 }
