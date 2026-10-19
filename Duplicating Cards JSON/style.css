@@ -3,3 +3,14 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+body {
+   background: linear-gradient(to bottom, #000000, #565656);
+   font-family: "Poppins", sans-serif;
+}
+.hero-section{
+    background-image: url("img/hero.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
