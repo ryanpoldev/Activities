@@ -23,8 +23,31 @@
 
           <div class="navbar d-flex justify-content-between p-0 mx-5 text-white">
             <img src="img/japaneselogo.png" alt="japaneselogo" style="width: 78px; height: 80px;">
-            <div class="nav-item align-items-center fs-5 fw-regular"> About
+            <div class="nav-item about-trigger align-items-center fs-5 fw-regular" role="button" data-bs-toggle="modal"
+              data-bs-target="#aboutModal"> About
+            </div>
+          </div>
 
+          <!--About Modal-->
+          <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+              <div class="modal-content about-modal">
+                <div class="modal-header border-0 pb-0">
+                  <h2 class="modal-title about-modal-title" id="aboutModalLabel">The Hashira: The Strongest Swordsmen of
+                    the Demon Slayer Corps</h2>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p class="about-modal-text mb-0">The Hashira are the highest-ranking swordsmen of the Demon Slayer
+                    Corps, each recognized for their extraordinary strength, mastery of Breathing Styles, and dedication
+                    to protecting humanity from demons. Every Hashira possesses a unique fighting style, personality,
+                    and personal history that shapes their journey as a warrior. From the blazing determination of the
+                    Flame Hashira to the calm precision of the Water Hashira, each one carries the weight of countless
+                    battles and sacrifices. United by a shared mission, the Hashira stand as humanity's strongest line
+                    of defense against the darkness threatening their world.</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -46,7 +69,6 @@
       </div>
     </div>
   </div>
-
 
   <!--Content-->
   <main class="container-fluid hashira-main mx-auto px-4 py-5">
@@ -71,7 +93,6 @@
       </div>
     </div>
   </div>
-
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
