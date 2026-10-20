@@ -113,7 +113,12 @@
 
     const list = document.getElementById("hashira-list");
 
-    list.innerHTML = hashiraData.map(h => `
+    let html = "";
+
+    for (let i = 0; i < hashiraData.length; i++) {
+      const h = hashiraData[i];
+
+      html += `
   <div class="col">
     <div class="card hashira-card h-100 overflow-hidden">
       <div class="d-flex flex-wrap align-items-center h-100">
@@ -126,7 +131,11 @@
         </div>
       </div>
     </div>
-  </div>`).join("");
+  </div>`;
+    }
+
+    list.innerHTML = html;
+
 
   </script>
 </body>
