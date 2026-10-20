@@ -16,6 +16,16 @@ body {
   background-repeat: no-repeat;
 }
 
+/* Content: duplicated Hashira cards (layout handled by Bootstrap classes in the index.html script template) */
+.hashira-main {
+  max-width: calc(1320px + 3rem);
+}
+
+.hashira-grid {
+  --bs-gutter-x: 2.6rem;
+  --bs-gutter-y: 2.6rem;
+}
+
 .hashira-card {
   background-color: #1a1a1a;
   border: 0;
@@ -23,11 +33,31 @@ body {
   color: #ffffff;
 }
 
-.hashira-name {
-  font-size: 1.75rem;
-  font-weight: 400;
-}
-
 .hashira-photo {
   display: block;
+  flex: 0 0 15rem;
+  width: 15rem;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.hashira-info {
+  flex: 1 1 19rem;
+  min-width: 0;
+}
+
+.hashira-info p {
+  margin-bottom: 0.75rem;
+}
+
+.hashira-info p:last-child {
+  margin-bottom: 0;
+}
+
+.hashira-name {
+  font-size: 1.6rem;
+  font-weight: 400;
 }
