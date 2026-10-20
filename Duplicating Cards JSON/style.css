@@ -5,7 +5,7 @@
 }
 
 body {
-  background: linear-gradient(to bottom, #000000, #565656);
+  background: linear-gradient(to top,  #353535, #000000);
   font-family: "Poppins", sans-serif;
 }
 
@@ -16,7 +16,6 @@ body {
   background-repeat: no-repeat;
 }
 
-/* Content: duplicated Hashira cards (layout handled by Bootstrap classes in the index.html script template) */
 .hashira-main {
   max-width: calc(1320px + 3rem);
 }
