@@ -49,8 +49,28 @@
 
 
   <!--Content-->
-   <main class="container-fluid hashira-main mx-auto px-4 py-5">
+  <main class="container-fluid hashira-main mx-auto px-4 py-5">
     <div class="row row-cols-1 row-cols-xl-2 hashira-grid" id="hashira-list"></div>
+  </main>
+
+  <!--Footer-->
+  <div class="container-fluid p-0 overflow-hidden">
+    <div class="row">
+      <div class="col">
+        <div class="card rounded-0 text-white" style="height: 330px; background-color: #171717;">
+          <div class="div text-center mt-4">
+            <div class="div"><img src="img/Sticker 1.png" alt="" style="width: 160px;"></div>
+            <div class="div">
+              <h3 class="fw-semibold mb-5">Nine Pillars. One Mission. Destroy all demons</h2>
+            </div>
+            <div class="div">
+              <p class="opacity-75" style="font-size: 14px;">Designed by: Ryan Pol Austria Malabanan</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
@@ -72,7 +92,7 @@
 
     const list = document.getElementById("hashira-list");
 
-   list.innerHTML = hashiraData.map(h => `
+    list.innerHTML = hashiraData.map(h => `
   <div class="col">
     <div class="card hashira-card h-100 overflow-hidden">
       <div class="d-flex flex-wrap align-items-center h-100">
