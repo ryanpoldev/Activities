@@ -23,3 +23,44 @@ body{
 .bottom-container {
   margin-top: auto; /* pushes row 2 to the bottom of the section */
 }
+
+/* Sections that host a fade overlay */
+.custom-section,
+.story-section {
+  position: relative;
+}
+
+/* Fades are overlays: out of the document flow, pinned to the edge,
+   so they take no space and never push other content around */
+.fade-top,
+.fade-bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 500px;
+  pointer-events: none; /* clicks pass through */
+  z-index: 0;
+}
+
+.fade-top {
+  top: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0), #000);
+}
+
+.fade-bottom {
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #000);
+}
+
+/* Keep real content above the fades */
+.custom-section > :not(.fade-top):not(.fade-bottom),
+.story-section > :not(.fade-top):not(.fade-bottom) {
+  position: relative;
+  z-index: 1;
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
+
