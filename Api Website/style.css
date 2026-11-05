@@ -3,3 +3,23 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+body{
+  background-color: black;
+}
+
+.custom-section {
+  background-image: url('img/background.jpg');
+  background-repeat: no-repeat;
+  background-position: fixed;
+  background-size: 100% /* stretch to exactly fill screen width */
+}
+
+.sticker img {
+  width: 280px;
+  margin-left: 60%;
+}
+
+.bottom-container {
+  margin-top: auto; /* pushes row 2 to the bottom of the section */
+}
