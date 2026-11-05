@@ -2,13 +2,11 @@ const API_BASE = "https://www.demonslayer-api.com/api/v1";
 const PAGE_SIZE = 8; // cards per page
 const FALLBACK_IMG = "img/Isologo.svg";
 
-// The API has no CORS headers, so if a direct call is blocked we try these proxies
 const proxies = [
   "https://corsproxy.io/?url=",
   "https://api.allorigins.win/raw?url="
 ];
 
-/* ---------- html elements ---------- */
 var elCharList = document.getElementById("characters-list");
 var elCharPagination = document.getElementById("characters-pagination");
 var elCharSearch = document.getElementById("characters-search");
@@ -25,7 +23,6 @@ var elModalTitle = document.getElementById("detailModalTitle");
 var elModalBody = document.getElementById("detailModalBody");
 var modal = new bootstrap.Modal(document.getElementById("detailModal"));
 
-/* ---------- data ---------- */
 var allCharacters = [];
 var filteredCharacters = [];
 var charPage = 1;
@@ -34,7 +31,6 @@ var allStyles = [];
 var filteredStyles = [];
 var stylePage = 1;
 
-/* ---------- helper functions ---------- */
 function escapeHtml(value) {
   if (value == null) return "";
   return String(value)
@@ -45,7 +41,6 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
-// the API uses ´ instead of '
 function fixText(text) {
   if (!text) return "";
   return escapeHtml(String(text).replace(/´/g, "'"));
@@ -57,7 +52,6 @@ function imageTag(src, alt) {
     'onerror="this.onerror=null;this.src=\'' + FALLBACK_IMG + '\'">';
 }
 
-// try direct first, then each proxy
 const getJSON = async (url) => {
   var urls = [url];
   for (var i = 0; i < proxies.length; i++) {
@@ -76,7 +70,6 @@ const getJSON = async (url) => {
   throw new Error("Could not load " + url);
 }
 
-// the API is paginated, so get page 1 and then all the other pages
 const getAll = async (endpoint) => {
   const first = await getJSON(API_BASE + "/" + endpoint);
   var items = first.content;
@@ -90,7 +83,6 @@ const getAll = async (endpoint) => {
   return items;
 }
 
-// builds the pagination buttons html
 function makePagination(page, totalPages) {
   var html = "";
 
@@ -131,9 +123,7 @@ function errorHtml(retryId) {
     '<button class="btn btn-danger" type="button" id="' + retryId + '">Try again</button></div>';
 }
 
-/* ==========================================================
-   CHARACTERS
-   ========================================================== */
+
 function showCharacters() {
   var start = (charPage - 1) * PAGE_SIZE;
   var pageItems = filteredCharacters.slice(start, start + PAGE_SIZE);
@@ -163,7 +153,7 @@ function showCharacters() {
     elCharList.innerHTML = html;
   }
 
-  // pagination
+
   var totalPages = Math.ceil(filteredCharacters.length / PAGE_SIZE);
   if (filteredCharacters.length <= PAGE_SIZE) {
     elCharPagination.innerHTML = "";
@@ -171,7 +161,7 @@ function showCharacters() {
     elCharPagination.innerHTML = makePagination(charPage, totalPages);
   }
 
-  // count text
+
   var search = elCharSearch.value.trim();
   if (search != "") {
     elCharCount.innerHTML = filteredCharacters.length + ' result(s) for "' + escapeHtml(search) + '" (of ' + allCharacters.length + ')';
@@ -233,7 +223,7 @@ const getCharacters = async () => {
   }
 }
 
-// events
+
 elCharSearch.addEventListener("input", filterCharacters);
 
 elCharClear.addEventListener("click", function () {
@@ -260,9 +250,7 @@ elCharList.addEventListener("click", function (e) {
   if (button) showCharacterDetail(button.dataset.id);
 });
 
-/* ==========================================================
-   COMBAT STYLES
-   ========================================================== */
+
 function showStyles() {
   var start = (stylePage - 1) * PAGE_SIZE;
   var pageItems = filteredStyles.slice(start, start + PAGE_SIZE);
@@ -290,7 +278,7 @@ function showStyles() {
     elStyleList.innerHTML = html;
   }
 
-  // pagination
+
   var totalPages = Math.ceil(filteredStyles.length / PAGE_SIZE);
   if (filteredStyles.length <= PAGE_SIZE) {
     elStylePagination.innerHTML = "";
@@ -298,7 +286,7 @@ function showStyles() {
     elStylePagination.innerHTML = makePagination(stylePage, totalPages);
   }
 
-  // count text
+
   var search = elStyleSearch.value.trim();
   if (search != "") {
     elStyleCount.innerHTML = filteredStyles.length + ' result(s) for "' + escapeHtml(search) + '" (of ' + allStyles.length + ')';
@@ -365,7 +353,6 @@ const getStyles = async () => {
   }
 }
 
-// events
 elStyleSearch.addEventListener("input", filterStyles);
 
 elStyleClear.addEventListener("click", function () {
@@ -392,6 +379,5 @@ elStyleList.addEventListener("click", function (e) {
   if (button) showStyleDetail(button.dataset.id);
 });
 
-/* ---------- start ---------- */
 getCharacters();
 getStyles();

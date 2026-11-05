@@ -22,17 +22,14 @@ body{
 }
 
 .bottom-container {
-  margin-top: auto; /* pushes row 2 to the bottom of the section */
+  margin-top: auto; 
 }
 
-/* Sections that host a fade overlay */
 .custom-section,
 .story-section {
   position: relative;
 }
 
-/* Fades are overlays: out of the document flow, pinned to the edge,
-   so they take no space and never push other content around */
 .fade-top,
 .fade-bottom {
   position: absolute;
@@ -60,17 +57,9 @@ body{
   z-index: 1;
 }
 
-
 html {
   scroll-behavior: smooth;
 }
-
-
-/* ==========================================================
-   API sections (characters / combat styles)
-   No media queries: layout is handled by Bootstrap's grid
-   classes, clamp(), flex-wrap and aspect-ratio.
-   ========================================================== */
 
 .nav-link-custom {
   color: #fff;
@@ -88,7 +77,6 @@ html {
   opacity: .85;
 }
 
-/* search */
 .api-input {
   background: rgba(0, 0, 0, .6);
   color: #fff;
@@ -102,7 +90,6 @@ html {
 }
 .api-input::placeholder { color: #adb5bd; }
 
-/* cards */
 .api-card {
   background: rgba(10, 10, 10, .75);
   border: 1px solid rgba(255, 255, 255, .15);
@@ -142,7 +129,6 @@ html {
 .clamp-2 { -webkit-line-clamp: 2; line-clamp: 2; }
 .clamp-3 { -webkit-line-clamp: 3; line-clamp: 3; }
 
-/* pagination (dark theme) */
 .pagination-dark .page-link {
   background: rgba(0, 0, 0, .65);
   color: #fff;
@@ -152,7 +138,6 @@ html {
 .pagination-dark .page-item.active .page-link { background: #dc3545; border-color: #dc3545; }
 .pagination-dark .page-item.disabled .page-link { background: rgba(0, 0, 0, .4); color: #6c757d; }
 
-/* modal */
 .detail-modal {
   background: #0d0d0d;
   border: 1px solid #dc3545;
@@ -171,17 +156,12 @@ html {
   opacity: .9;
 }
 
-
-/* ==========================================================
-   Landing + story responsiveness (no media queries)
-   ========================================================== */
 .nav-logo { width: clamp(56px, 10vw, 80px); height: auto; }
 .nav-links { font-size: clamp(1rem, 2.2vw, 1.25rem); }
 
 .hero-title { font-size: clamp(1.4rem, 4vw, 2.2rem); }
 .hero-text  { opacity: .8; font-size: clamp(.95rem, 2vw, 1.15rem); }
 
-/* story background: always covers the section, never stretched */
 .story-bg {
   background-repeat: no-repeat;
   background-position: center;
@@ -192,5 +172,8 @@ html {
   font-size: clamp(.95rem, 1.8vw, 1.15rem);
   line-height: 1.7;
 }
-/* the hard-coded <br> line breaks only fit one screen width, let text wrap naturally */
 .story-content br { display: none; }
+
+.footer-sticker{
+  width: 10px;
+}
