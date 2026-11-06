@@ -111,16 +111,55 @@ function openModal(title, html) {
   modal.show();
 }
 
-function loadingHtml(text) {
-  return '<div class="col-12 text-center py-5">' +
-    '<div class="spinner-border text-danger" role="status"></div>' +
-    '<div class="mt-3 opacity-75">Loading ' + text + '...</div></div>';
+function skeletonHtml(wide) {
+  var html = "";
+  for (var i = 0; i < PAGE_SIZE; i++) {
+    html += '<div class="col">' +
+      '<div class="api-card skeleton-card h-100" aria-hidden="true">' +
+        '<div class="api-card-img' + (wide ? ' api-card-img-wide' : '') + ' skeleton"></div>' +
+        '<div class="p-3">' +
+          '<div class="skeleton line" style="width:45%"></div>' +
+          '<div class="skeleton line"></div>' +
+          '<div class="skeleton line" style="width:80%"></div>' +
+          '<div class="skeleton line mt-3" style="height:2rem;border-radius:999px"></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+  return html;
+}
+
+function emptyHtml(text) {
+  return '<div class="col-12 state-box">' +
+    '<div class="display-6 mb-2" aria-hidden="true">&#9876;</div>' +
+    '<div>' + text + '</div></div>';
 }
 
 function errorHtml(retryId) {
-  return '<div class="col-12 text-center py-5">' +
+  return '<div class="col-12 state-box">' +
     '<p class="mb-3">Could not load data from the API.</p>' +
-    '<button class="btn btn-danger" type="button" id="' + retryId + '">Try again</button></div>';
+    '<button class="btn btn-ember rounded-pill px-4" type="button" id="' + retryId + '">Try again</button></div>';
+}
+
+/* ---------- scroll reveal (fade/slide in when visible) ---------- */
+var revealObserver = null;
+if ("IntersectionObserver" in window) {
+  revealObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("in");
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+}
+
+function watchReveal(root) {
+  var items = root.querySelectorAll(".reveal:not(.in)");
+  for (var i = 0; i < items.length; i++) {
+    if (revealObserver) revealObserver.observe(items[i]);
+    else items[i].classList.add("in");
+  }
 }
 
 
@@ -129,29 +168,31 @@ function showCharacters() {
   var pageItems = filteredCharacters.slice(start, start + PAGE_SIZE);
 
   if (pageItems.length == 0) {
-    elCharList.innerHTML = '<div class="col-12 text-center py-5 opacity-75">No characters match your search.</div>';
+    elCharList.innerHTML = emptyHtml("No characters match your search.");
   } else {
     var html = "";
     for (var i = 0; i < pageItems.length; i++) {
       var c = pageItems[i];
-      html += '<div class="col">' +
-        '<div class="api-card h-100 d-flex flex-column">' +
-          '<div class="api-card-img">' + imageTag(c.img, c.name) + '</div>' +
-          '<div class="p-3 d-flex flex-column flex-grow-1">' +
-            '<h5 class="mb-2">' + escapeHtml(c.name) + '</h5>' +
-            '<div class="mb-2 d-flex flex-wrap gap-2">' +
-              '<span class="badge text-bg-danger">' + escapeHtml(c.race) + '</span>' +
-              (c.gender ? '<span class="badge text-bg-secondary">' + escapeHtml(c.gender) + '</span>' : '') +
-              (c.age ? '<span class="badge text-bg-dark border">Age ' + escapeHtml(c.age) + '</span>' : '') +
-            '</div>' +
-            '<p class="small opacity-75 clamp-3 mb-3">' + fixText(c.description) + '</p>' +
-            '<button class="btn btn-outline-light btn-sm mt-auto" type="button" data-id="' + c.id + '">View</button>' +
+      html += '<div class="col reveal" style="--i:' + (i % 4) + '">' +
+        '<article class="api-card h-100 d-flex flex-column">' +
+          '<div class="api-card-img">' + imageTag(c.img, c.name) +
+            (c.race ? '<span class="chip chip-red card-tag">' + escapeHtml(c.race) + '</span>' : '') +
+            '<h5 class="card-name">' + escapeHtml(c.name) + '</h5>' +
           '</div>' +
-        '</div>' +
+          '<div class="p-3 d-flex flex-column flex-grow-1">' +
+            '<div class="mb-2 d-flex flex-wrap gap-2">' +
+              (c.gender ? '<span class="chip">' + escapeHtml(c.gender) + '</span>' : '') +
+              (c.age ? '<span class="chip">Age ' + escapeHtml(c.age) + '</span>' : '') +
+            '</div>' +
+            '<p class="card-desc clamp-3 mb-3">' + fixText(c.description) + '</p>' +
+            '<button class="btn btn-sm rounded-pill card-view stretched-link mt-auto" type="button" data-id="' + c.id + '">View profile</button>' +
+          '</div>' +
+        '</article>' +
       '</div>';
     }
     elCharList.innerHTML = html;
   }
+  watchReveal(elCharList);
 
 
   var totalPages = Math.ceil(filteredCharacters.length / PAGE_SIZE);
@@ -193,12 +234,12 @@ function showCharacterDetail(id) {
       '<div class="detail-img">' + imageTag(c.img, c.name) + '</div>' +
     '</div>' +
     '<div class="col-12 col-md-7">' +
-      '<dl class="row mb-3">' +
-        '<dt class="col-4">Race</dt><dd class="col-8">' + escapeHtml(c.race) + '</dd>' +
-        '<dt class="col-4">Gender</dt><dd class="col-8">' + escapeHtml(c.gender || "Unknown") + '</dd>' +
-        '<dt class="col-4">Age</dt><dd class="col-8">' + escapeHtml(c.age || "Unknown") + '</dd>' +
-      '</dl>' +
-      '<p>' + fixText(c.description) + '</p>' +
+      '<div class="d-flex flex-wrap gap-2 mb-3">' +
+        '<span class="chip chip-red">' + escapeHtml(c.race || "Unknown") + '</span>' +
+        '<span class="chip">' + escapeHtml(c.gender || "Unknown") + '</span>' +
+        '<span class="chip">Age ' + escapeHtml(c.age || "Unknown") + '</span>' +
+      '</div>' +
+      '<p class="detail-text">' + fixText(c.description) + '</p>' +
       (c.quote ? '<blockquote class="quote-box">&ldquo;' + fixText(c.quote) + '&rdquo;</blockquote>' : '') +
     '</div>' +
   '</div>';
@@ -207,7 +248,7 @@ function showCharacterDetail(id) {
 }
 
 const getCharacters = async () => {
-  elCharList.innerHTML = loadingHtml("characters");
+  elCharList.innerHTML = skeletonHtml(false);
   elCharPagination.innerHTML = "";
   elCharCount.innerHTML = "";
 
@@ -256,27 +297,29 @@ function showStyles() {
   var pageItems = filteredStyles.slice(start, start + PAGE_SIZE);
 
   if (pageItems.length == 0) {
-    elStyleList.innerHTML = '<div class="col-12 text-center py-5 opacity-75">No combat styles match your search.</div>';
+    elStyleList.innerHTML = emptyHtml("No combat styles match your search.");
   } else {
     var html = "";
     for (var i = 0; i < pageItems.length; i++) {
       var s = pageItems[i];
       var userCount = s.combat_style_character ? s.combat_style_character.length : 0;
 
-      html += '<div class="col">' +
-        '<div class="api-card h-100 d-flex flex-column">' +
-          '<div class="api-card-img api-card-img-wide">' + imageTag(s.img, s.name) + '</div>' +
-          '<div class="p-3 d-flex flex-column flex-grow-1">' +
-            '<h5 class="mb-2">' + escapeHtml(s.name) + '</h5>' +
-            '<p class="small opacity-75 clamp-3 mb-2">' + fixText(s.description) + '</p>' +
-            '<p class="small mb-3"><span class="badge text-bg-danger">' + userCount + '</span> user' + (userCount == 1 ? '' : 's') + '</p>' +
-            '<button class="btn btn-outline-light btn-sm mt-auto" type="button" data-id="' + s.id + '">View</button>' +
+      html += '<div class="col reveal" style="--i:' + (i % 4) + '">' +
+        '<article class="api-card h-100 d-flex flex-column">' +
+          '<div class="api-card-img api-card-img-wide">' + imageTag(s.img, s.name) +
+            '<span class="chip chip-glass card-tag">' + userCount + ' user' + (userCount == 1 ? '' : 's') + '</span>' +
+            '<h5 class="card-name">' + escapeHtml(s.name) + '</h5>' +
           '</div>' +
-        '</div>' +
+          '<div class="p-3 d-flex flex-column flex-grow-1">' +
+            '<p class="card-desc clamp-3 mb-3">' + fixText(s.description) + '</p>' +
+            '<button class="btn btn-sm rounded-pill card-view stretched-link mt-auto" type="button" data-id="' + s.id + '">View style</button>' +
+          '</div>' +
+        '</article>' +
       '</div>';
     }
     elStyleList.innerHTML = html;
   }
+  watchReveal(elStyleList);
 
 
   var totalPages = Math.ceil(filteredStyles.length / PAGE_SIZE);
@@ -318,26 +361,26 @@ function showStyleDetail(id) {
   var users = s.combat_style_character || [];
 
   var html = '<div class="detail-img detail-img-wide mb-3">' + imageTag(s.img, s.name) + '</div>' +
-    '<p>' + fixText(s.description) + '</p>' +
-    '<h6 class="mt-4 mb-3">Known users</h6>';
+    '<p class="detail-text">' + fixText(s.description) + '</p>' +
+    '<h6 class="detail-heading mt-4 mb-3">Known users</h6>';
 
   if (users.length == 0) {
     html += '<p class="opacity-75">No known users.</p>';
   } else {
-    html += '<ul class="list-group list-group-flush">';
+    html += '<div class="row row-cols-1 row-cols-sm-2 g-2">';
     for (var i = 0; i < users.length; i++) {
-      html += '<li class="list-group-item bg-transparent text-white border-secondary">' +
+      html += '<div class="col"><div class="user-item">' +
         '<strong>' + escapeHtml(users[i].name) + '</strong>' +
-        '<div class="small opacity-75 clamp-2">' + fixText(users[i].description) + '</div></li>';
+        '<div class="small opacity-75 clamp-2">' + fixText(users[i].description) + '</div></div></div>';
     }
-    html += '</ul>';
+    html += '</div>';
   }
 
   openModal(s.name, html);
 }
 
 const getStyles = async () => {
-  elStyleList.innerHTML = loadingHtml("styles");
+  elStyleList.innerHTML = skeletonHtml(true);
   elStylePagination.innerHTML = "";
   elStyleCount.innerHTML = "";
 
@@ -381,3 +424,51 @@ elStyleList.addEventListener("click", function (e) {
 
 getCharacters();
 getStyles();
+
+
+/* ---------- page polish: navbar, progress bar, back-to-top ---------- */
+var elNav = document.getElementById("mainNav");
+var elNavMenu = document.getElementById("navMenu");
+var elProgress = document.getElementById("progress");
+var elToTop = document.getElementById("toTop");
+
+var spySections = ["home", "story", "characters", "styles"];
+var navLinks = document.querySelectorAll("#mainNav .nav-link");
+
+// highlight the nav link of the section that is currently under the middle of the screen
+function updateActiveLink() {
+  var line = window.innerHeight * 0.4;
+  var current = spySections[0];
+  for (var i = 0; i < spySections.length; i++) {
+    if (document.getElementById(spySections[i]).getBoundingClientRect().top <= line) current = spySections[i];
+  }
+  for (var j = 0; j < navLinks.length; j++) {
+    navLinks[j].classList.toggle("active", navLinks[j].getAttribute("href") == "#" + current);
+  }
+}
+
+function onPageScroll() {
+  var y = window.scrollY;
+  updateActiveLink();
+  var max = document.documentElement.scrollHeight - window.innerHeight;
+
+  elNav.classList.toggle("scrolled", y > 30);
+  elProgress.style.transform = "scaleX(" + (max > 0 ? Math.min(y / max, 1) : 0) + ")";
+  elToTop.classList.toggle("show", y > 600);
+}
+window.addEventListener("scroll", onPageScroll, { passive: true });
+onPageScroll();
+
+elToTop.addEventListener("click", function () {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+elNavMenu.addEventListener("show.bs.collapse", function () { elNav.classList.add("menu-open"); });
+elNavMenu.addEventListener("hidden.bs.collapse", function () { elNav.classList.remove("menu-open"); });
+elNavMenu.addEventListener("click", function (e) {
+  if (e.target.closest(".nav-link") && elNavMenu.classList.contains("show")) {
+    bootstrap.Collapse.getOrCreateInstance(elNavMenu, { toggle: false }).hide();
+  }
+});
+
+watchReveal(document);
